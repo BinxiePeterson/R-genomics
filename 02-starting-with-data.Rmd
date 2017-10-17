@@ -24,40 +24,41 @@ minutes: 25
 # Looking at metadata
 ```
 
-We are studying a population of Escherichia coli (designated Ara-3), which were propagated for more than 40,000 generations in a glucose-limited minimal medium. This medium was supplemented with citrate which E. coli cannot metabolize in the aerobic conditions of the experiment. Sequencing of the populations at regular time points reveals that spontaneous citrate-using mutants (Cit+) appeared at around 31,000 generations. This metadata describes information on the Ara-3 clones and the columns represent:
+We will be looking at a modified version of the metadata of the gene knockout study. The aim of this study was to determine whether knocking out the protein 'chemerin' affects gut microbial composition. In total, 116 mouse samples were acquired from two different facilities. Metadata associated with each sample is indicated in the mapping file (mouse_mapfile.txt), which we will download using RStudio. In this mapping file the genotypes of interest can be seen: wildtype (WT), chemerin knockout (chemerin_KO), chemerin receptor knockout (CMKLR1_KO) and a heterozygote for the receptor knockout (HET). Also of importance are the two source facilities: "BZ" and "CJS". It is generally a good idea to include as much metadata as possible, since this data can easily be explored later on.
 
-| Column           | Description                                |
-|------------------|--------------------------------------------|
-| sample           | clone name					|
-| generation       | generation when sample frozen		|
-| clade            | based on parsimony-based tree		|
-| strain           | ancestral strain				|
-| cit              | citrate-using mutant status		|
-| run              | Sequence read archive sample ID		|
-| genome_size      | size in Mbp (made up data for this lesson) |
+The metadata mapping file of this dataset is stored as a comma separated value (CSV) file.
+Each row holds information for a single mouse, and the columns represent:
 
+| Column                | Description                                           |
+|-----------------------|-------------------------------------------------------|
+| SampleID              | Unique id for each sample                             |
+| BarcodeSequence       | Barcode sequence used for each sample (NA)            |
+| LinkerPrimerSequence  | Linker/primer sequence used to amplify the sample (NA)|
+| FileInput             | Name of .fastq input file                             |
+| Source                | BZ or CJS                                             |
+| Mouse                 | Unique number for each mouse                          |
+| Sex                   | Sex of each mouse                                     |
+| Weight                | Weight of each mouse in grams                         |
+| Cage                  | Cage number (NA)                                      |
+| Genotype              | WT, chemerin_KO, CMKLR1_HE, or CMKLR1_KO              |
+| SamplingWeek          | Week in which mouse was sampled                       |
+| Description           | Unique id for each mouse                              |
 
+We are going to use the R function `download.file()` to download the CSV file
+that contains the metadata, and we will use `read.csv()` to
+load into memory the content of the CSV file as an object of class `data.frame`.
 
-
-
-The metadata file required for this lesson can be [downloaded directly here](https://raw.githubusercontent.com/datacarpentry/R-genomics/gh-pages/data/Ecoli_metadata.csv) or [viewed in Github](./data/Ecoli_metadata.csv).
-
-### OR
-
-Use R to download the file by giving the `download.file()` function the link address for the file, and where you want to put this file. If you see and error in response to `download.file()`, you may need to change the directory `"~/Downloads/portal_data_joined.csv"`
+To download the metadata into the `data/` subdirectory, run the following:
 
 ```{r, eval=TRUE,  purl=FALSE}
-download.file("https://raw.githubusercontent.com/datacarpentry/R-genomics/gh-pages/data/Ecoli_metadata.csv",
-              "data/Ecoli_metadata.csv")
+download.file("https://raw.githubusercontent.com/BinxiePeterson/introduction-to-R-for-16S/gh-pages/mouse_mapfile.csv",
+              "data/metadata.csv")
 ```
-- First, make sure you are in the correct working directory by typing `getwd()`
-- Second, create a new subdirectory within this working directory called `data`
-- Third, move the just-downloaded `Ecoli_metadata.csv` file into this `data` directory
 
 You are now ready to load the data. We are going to use the R function  `read.csv()` to load the data file into memory (as a `data.frame`):
 
 ```{r, eval=TRUE,  purl=FALSE}
-metadata <- read.csv('data/Ecoli_metadata.csv')
+metadata <- read.csv('data/metadata.csv', header = TRUE)
 ```
 
 This statement doesn't produce any output because assignment doesn't display
@@ -68,10 +69,10 @@ Alternatively, wrapping an assignment in parentheses will perform the assignment
 and display it at the same time.
 
 ```{r, eval = TRUE, purl = FALSE}
-(metadata <- read.csv('data/Ecoli_metadata.csv'))
+(metadata <- read.csv('data/metadata.csv'))
 ```
 
-Wow... that was a lot of output. At least it means the data loaded properly. Let's check the top (the first 6 lines) of this `data.frame` using the function `head()`:
+Let's check the top (the first 6 lines) of this `data.frame` using the function `head()`:
 
 ```{r, results='show', purl=FALSE}
 head(metadata)
@@ -141,7 +142,7 @@ Based on the given table of functions to asses data structure, can you answer th
 
 * What is the class of the object `metadata`?
 * How many rows and how many columns are in this object?
-* How many citrate+ mutants have been recorded in this population?
+* How many wild type strains have been used in this study?
 
 
 As you can see, many of the columns in our data frame are of a special class called
@@ -170,13 +171,13 @@ str(metadata)
 ```
 
 We can see the names of the multiple columns. And, we see that 
-some say things like `Factor w/ 30 levels`
+some say things like `Factor w/ 4 levels`
 
 When we read in a file, any column that contains text is automatically
 assumed to be a factor. Once created, factors can only contain a pre-defined set values, known as
 *levels*. By default, R always sorts *levels* in alphabetical order. 
 
-For instance, we see that `cit` is a Factor w/ 3 levels, `minus`, `plus` and `unknown`.
+For instance, we see that `Genotype` is a Factor w/ 4 levels, `chemerin_KO`, `CMKLR1_HE`, `CMKLR1_KO` and `WT`.
 
 <!--
 
@@ -184,8 +185,8 @@ You can check this by using the function `levels()`, and check the
 number of levels using `nlevels()`:
 
 ```{r, purl=FALSE, eval=FALSE}
-levels(citrate)
-nlevels(citrate)
+levels(metadata$Genotype)
+nlevels(metadata$Genotype)
 ```
 
 Sometimes, the order of the factors does not matter, other times you might want
