@@ -24,7 +24,7 @@ minutes: 30
 In this lesson you will learn how to extract and manipulate data stored in data frames in R. We will work with the *E. coli* metadata file that we used previously. Be sure to read this file into a dataframe named `metadata`, if you haven't already done so.
 
 ```{r, eval=TRUE,  purl=FALSE}
-metadata <- read.csv('data/Ecoli_metadata.csv')
+metadata <- read.csv('data/metadata.csv', header = TRUE)
 ```
 
 Because the columns of a data frame are vectors, we will first learn how to extract elements from vectors and then learn how to apply this concept to select rows and columns from a data frame.  
@@ -90,8 +90,7 @@ seq(20, 4, by = -3)
 > 
 > > ## Solution
 > > ten_letters[seq(2, 10, by = 2)]
-> {: .solution}
-{: .challenge}
+> 
 
 
 ## Data frames
@@ -109,7 +108,7 @@ metadata[, 7]    # Entire 7th column
 ```
 
 
-> ## Challenge
+> ## Exercise
 > 
 > The function `nrow()` on a `data.frame` returns the number of rows. For example, try typing nrow(metadata)`.
 > Use `nrow()` and `seq()` to create a new data frame called `meta_by_2` that includes all even numbered rows of `metadata`.
@@ -118,8 +117,7 @@ metadata[, 7]    # Entire 7th column
 > > meta_data[seq(2, nrow(metadata), by = 2, ]
 > > 
 > >
-> {: .solution}
-{: .challenge}
+> 
 
 For larger datasets, it can be tricky to remember the column number that corresponds to a particular variable. Sometimes the column number for a particular variable can change if your analysis adds or removes columns. The best practice when working with columns in a data frame is to refer to them by name. This also makes your code easier to read and your intentions clearer.
 
@@ -135,42 +133,21 @@ For instance, to extract all the strain information from our datasets:
 
 ```{r, eval=FALSE}
 # Select the strain column from metadata
-metadata[ , "strain"]
+metadata[ , "Genotype"]
 
 # Alternatively...
-metadata$strain
+metadata$Genotype
 ```
 
 The first method allows you to select multiple columns at once. Suppose we wanted strain and clade information:
 
 ```{r, eval=FALSE}
-metadata[, c("strain", "clade")]
+metadata[, c("Genotype", "Sex")]
 ```
 
 You can even access columns by column name _and_ select specific rows of interest. For example, if we wanted the strain and clade of just rows 4 through 7, we could do:
 
 ```{r, eval=FALSE}
-metadata[4:7, c("strain", "clade")]
+metadata[4:7, c("Genotype", "Sex")]
 ```
-
-
-<!--
-Still need to address the following learning objectives:
- * Append columns to a data frame.
- * Create subsets of a data frame.
-
-The following headings are just suggestions.
-
->
-
-# Manipulating columns
-
-
-## Mathematical operations
-
-## Appending new columns
-
-
-# Creating subsets
-
 

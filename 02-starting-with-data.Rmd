@@ -179,7 +179,6 @@ assumed to be a factor. Once created, factors can only contain a pre-defined set
 
 For instance, we see that `Genotype` is a Factor w/ 4 levels, `chemerin_KO`, `CMKLR1_HE`, `CMKLR1_KO` and `WT`.
 
-<!--
 
 You can check this by using the function `levels()`, and check the
 number of levels using `nlevels()`:

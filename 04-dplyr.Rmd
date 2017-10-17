@@ -6,7 +6,7 @@ author: Data Carpentry contributors
 
 ```{r, echo=FALSE, purl=FALSE, message = FALSE}
 # source("setup.R")
-metadata <- read.csv("data/Ecoli_metadata.csv")
+metadata <- read.csv("data/metadata.csv")
 ```
 
 ------------
@@ -73,13 +73,13 @@ data frame, use `select()`. The first argument to this function is the data
 frame (`metadata`), and the subsequent arguments are the columns to keep.
 
 ```{r, results = 'hide', purl = FALSE}
-select(metadata, sample, clade, cit, genome_size)
+select(metadata, SampleID, Sex, Genotype)
 ```
 
-To choose rows, use `filter()`:
+To choose rows based on specific criteria, use `filter()`:
 
 ```{r, purl = FALSE}
-filter(metadata, cit == "plus")
+filter(metadata, Genotype == "WT")
 ```
 
 ### Pipes
@@ -98,8 +98,8 @@ part of `dplyr`.
 
 ```{r, purl = FALSE}
 metadata %>%
-  filter(cit == "plus") %>%
-  select(sample, generation, clade)
+  filter(Genotype == "WT") %>%
+  select(SampleID, Sex, Genotype)
 ```
 
 In the above we use the pipe to send the `metadata` data set first through
@@ -112,17 +112,33 @@ If we wanted to create a new object with this smaller version of the data we
 could do so by assigning it a new name:
 
 ```{r, purl = FALSE}
-meta_citplus <- metadata %>%
-  filter(cit == "plus") %>%
-  select(sample, generation, clade)
+meta_WT <- metadata %>%
+  filter(Genotype == "WT") %>%
+  select(SampleID, Sex, Genotype)
 
-meta_citplus
+meta_WT
 ```
 
 > ### Challenge {.challenge}
 >
-> Using pipes, subset the data to include rows where the clade is 'Cit+'. Retain columns
-> `sample`, `cit`, and `genome_size.`
+> Using pipes, subset the metadata to include rows where the Sex is male, and retain only the columns
+> `SampleID` and `Genotype.`
+
+<!---
+```{r, eval=FALSE, purl=FALSE}
+## Answer
+metadata %>%
+    filter(Sex == M) %>%
+    select(SampleID, Genotype)
+```
+--->
+
+    ```{r, eval=FALSE, purl=TRUE, echo=FALSE}
+    ## Pipes Challenge:
+    ##  Using pipes, subset the data to include rows where the Sex is
+    ##  male, and retain only the columns `SampleID` and `Genotype.`
+
+    ```
 
 ### Mutate
 
@@ -130,11 +146,11 @@ Frequently you'll want to create new columns based on the values in existing
 columns, for example to do unit conversions or find the ratio of values in two
 columns. For this we'll use `mutate()`.
 
-To create a new column of genome size in bp:
+To create a new column of weight in kg:
 
 ```{r, purl = FALSE, eval=FALSE}
 metadata %>%
-  mutate(genome_bp = genome_size *1e6)
+  mutate(Weight_kg = Weight / 1000)
 ```
 
 If this runs off your screen and you just want to see the first few rows, you
@@ -143,17 +159,21 @@ functions too, as long as the `dplyr` or `magrittr` packages are loaded).
 
 ```{r, purl = FALSE, eval=FALSE}
 metadata %>%
-  mutate(genome_bp = genome_size *1e6) %>%
+  mutate(Weight_kg = Weight / 1000) %>%
   head
 ```
 
-The row has a NA value for clade, so if we wanted to remove those we could
-insert a `filter()` in this chain:
+Note that we don't include parentheses at the end of our call to `head()` above.
+When piping into a function with no additional arguments, you can call the
+function with or without parentheses (e.g. `head` or `head()`).
+
+The first few rows of the output are full of `NA`s, so if we wanted to remove
+those we could insert a `filter()` in the chain:
 
 ```{r, purl = FALSE, eval=FALSE}
 metadata %>%
-  mutate(genome_bp = genome_size *1e6) %>%
-  filter(!is.na(clade)) %>%
+  filter(!is.na(Weight)) %>%
+  mutate(Weight_kg = Weight / 1000) %>%
   head
 ```
 
@@ -169,12 +189,12 @@ then combine the results. `dplyr` makes this very easy through the use of the
 grouped in this way `summarize()` can be used to collapse each group into
 a single-row summary.  `summarize()` does this by applying an aggregating
 or summary function to each group. For example, if we wanted to group by 
-citrate-using mutant status and find the number of rows of data for each 
-status, we would do:
+genotype and find the number of rows of data for each 
+genotype, we would do:
 
 ```{r, purl = FALSE}
 metadata %>%
-  group_by(cit) %>%
+  group_by(Genotype) %>%
   summarize(n())
 ```
 
@@ -190,47 +210,56 @@ dealing with simple statistics like the mean, the easiest way to
 ignore `NA` (the missing data) is to use `na.rm=TRUE` (`rm` stands for
 remove).
 
-So to view mean `genome_size` by mutant status:
+So to view mean `weight` by sex:
 
 ```{r, purl = FALSE}
 metadata %>%
-  group_by(cit) %>%
-  summarize(mean_size = mean(genome_size, na.rm = TRUE))
+  group_by(Sex) %>%
+  summarize(mean_weight = mean(Weight, na.rm = TRUE))
 ```
 
 You can group by multiple columns too:
 
 ```{r, purl = FALSE}
 metadata %>%
-  group_by(cit, clade) %>%
-  summarize(mean_size = mean(genome_size, na.rm = TRUE))
+  group_by(Sex, Genotype) %>%
+  summarize(mean_weight = mean(Weight, na.rm = TRUE))
 
 ```
 
-Looks like for one of these clones, the clade is missing. We could then discard those rows using `filter()`:
+When grouping both by `Sex` and `Genotype`, the first rows are for individuals
+for which their Weight was not recorded. We can remove the missing values for weight before we
+attempt to calculate the summary statistics. Because the missing
+values are removed, we can omit `na.rm = TRUE` when computing the mean:
+
+```{r, purl = FALSE}
+metadata %>%
+  filter(!is.na(Weight)) %>%
+  group_by(Sex, Genotype) %>%
+  summarize(mean_weight = mean(Weight))
+```
+
+Once the data are grouped, you can also summarize multiple variables at the same
+time (and not necessarily on the same variable). For instance, we could add a
+column indicating the minimum Weight for each Genotype for each Sex:
+
+```{r, purl = FALSE}
+metadata %>%
+  filter(!is.na(Weight)) %>%
+  group_by(Sex, Genotype) %>%
+  summarize(mean_weight = mean(Weight),
+            min_weight = min(Weight))
+```
+
+
+Looks like for some of these samples, the Sex was also not recorded. We could then discard those rows using `filter()`:
 
 ```{r, purl = FALSE, eval=FALSE}
 metadata %>%
-  group_by(cit, clade) %>%
-  summarize(mean_size = mean(genome_size, na.rm = TRUE)) %>%
-  filter(!is.na(clade))
+  group_by(Sex, Genotype) %>%
+  summarize(mean_weight = mean(Weight, na.rm = TRUE)) %>%
+  filter(Sex != "")
 ```
-
-All of a sudden this isn't running off the screen anymore. That's because `dplyr`
-has changed our `data.frame` to a `tbl_df`. This is a data structure that's very
-similar to a data frame; for our purposes the only difference is that it won't
-automatically show tons of data going off the screen.
-
-You can also summarize multiple variables at the same time:
-
-```{r, purl = FALSE, eval=FALSE}
-metadata %>%
-  group_by(cit, clade) %>%
-  summarize(mean_size = mean(genome_size, na.rm = TRUE),
-            min_generation = min(generation))
-
-```
-
 
 
 [Handy dplyr cheatsheet](http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)

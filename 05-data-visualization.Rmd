@@ -6,7 +6,7 @@ minutes: 30
 ---
 
 ```{r, echo=FALSE}
-metadata <- read.csv('./data/Ecoli_metadata.csv')
+metadata <- read.csv('./data/metadata.csv')
 ```
 
 > ## Learning Objectives 
@@ -20,11 +20,11 @@ metadata <- read.csv('./data/Ecoli_metadata.csv')
 
 The mathematician Richard Hamming once said, "The purpose of computing is insight, not numbers", and the best way to develop insight is often to visualize data. Visualization deserves an entire lecture (or course) of its own, but we can explore a few features of R's plotting packages.
 
-When we are working with large sets of numbers it can be useful to display that information graphically. R has a number of built-in tools for basic graph types such as hisotgrams, scatter plots, bar charts, boxplots and much [more](http://www.statmethods.net/graphs/). We'll test a few of these out here on the `genome_size` vector from our metadata.
+When we are working with large sets of numbers it can be useful to display that information graphically. R has a number of built-in tools for basic graph types such as hisotgrams, scatter plots, bar charts, boxplots and much [more](http://www.statmethods.net/graphs/). We'll test a few of these out here on the `Weight` vector from our metadata.
 
 
 ```{r simplestats}
-genome_size <- metadata$genome_size
+metadata_weight <- metadata$Weight
 
 ```
 
@@ -32,27 +32,27 @@ genome_size <- metadata$genome_size
 Let's start with a **scatterplot**. A scatter plot provides a graphical view of the relationship between two sets of numbers. We don't have a variable in our metadata that is a continous variable, so there is nothing to plot it against but we can plot the values against their index values just to demonstrate the function.
 
 ```{r scatter-plot1, fig.align='center'}
-plot(genome_size)
+plot(metadata_weight)
 ```
 
-Each point represents a clone and the value on the x-axis is the clone index in the file, where the values on the y-axis correspond to the genome size for the clone. For any plot you can customize many features of your graphs (fonts, colors, axes, titles) through [graphic options](http://www.statmethods.net/advgraphs/parameters.html)
+Each point represents a clone and the value on the x-axis is the clone index in the file, where the values on the y-axis correspond to the weight for the clone. For any plot you can customize many features of your graphs (fonts, colors, axes, titles) through [graphic options](http://www.statmethods.net/advgraphs/parameters.html)
 For example, we can change the shape of the data point using `pch`.
 
 ```{r, fig.align='center'}
-plot(genome_size, pch=8)
+plot(metadata_weight, pch=8)
 ```
 
 We can add a title to the plot by assigning a string to `main`:
 
 ```{r, fig.align='center'}
-plot(genome_size, pch=8, main="Scatter plot of genome sizes")
+plot(metadata_weight, pch=8, main="Scatter plot of weights")
 ```
 
 ## Histogram
 Another way to visualize the distribution of genome sizes is to use a histogram, we can do this buy using the `hist` function:
 
 ```{r, fig.align='center'}
-hist(genome_size)
+hist(metadata_weight)
 ```
 
 ## Boxplot
@@ -61,14 +61,14 @@ Using additional information from our metadata, we can use plots to compare valu
 
 ```{r boxplot, fig.align='center'}
 # Boxplot
-boxplot(genome_size ~ cit, metadata)
+boxplot(metadata_weight ~ Genotype, metadata)
 ```
 
 Similar to the scatterplots above, we can pass in arguments to add in extras like plot title, axis labels and colors.
 
 ```{r, fig.align='center'}
-boxplot(genome_size ~ cit, metadata,  col=c("pink","purple", "darkgrey"),
-        main="Average expression differences between celltypes", ylab="Expression")
+boxplot(metadata_weight ~ Genotype, metadata,  col=c("pink","purple", "darkgrey", "blue"),
+        main="Average weight differences between genotypes", ylab="Weight")
 ```
 
 
@@ -98,7 +98,7 @@ Geometric objects are the actual marks we put on a plot. Examples include:
 
 A plot **must have at least one geom**; there is no upper limit. You can add a geom to a plot using the + operator
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, warning=FALSE}
 ggplot(metadata) +
   geom_point() # note what happens here
 ```
@@ -113,9 +113,9 @@ Each type of geom usually has a **required set of aesthetics** to be set, and us
 
 To start, we will add position for the x- and y-axis since `geom_point` requires mappings for x and y, all others are optional.
 
-```{r, fig.align='center'}
+```{r, fig.align='center', warning=FALSE}
 ggplot(metadata) +
-  geom_point(aes(x = sample, y= genome_size))
+  geom_point(aes(x = Genotype, y= Weight))
 ```
 
 The labels on the x-axis are quite hard to read. To do this we need to add an additional theme layer. The ggplot2 `theme` system handles non-data plot elements such as:
@@ -127,9 +127,9 @@ The labels on the x-axis are quite hard to read. To do this we need to add an ad
 
 There are built-in themes we can use, or we can adjust specific elements. For our figure we will change the x-axis labels to be plotted on a 45 degree angle with a small horizontal shift to avoid overlap. We will also add some additional aesthetics by mapping them to other variables in our dataframe. _For example, the color of the points will reflect the number of generations and the shape will reflect citrate mutant status._ The size of the points can be adjusted within the `geom_point` but does not need to be included in `aes()` since the value is not mapping to a variable.
 
-```{r, fig.align='center'}
+```{r, fig.align='center', warning=FALSE}
 ggplot(metadata) +
-  geom_point(aes(x = sample, y= genome_size, color = generation, shape = cit), size = rel(3.0)) +
+  geom_point(aes(x = Genotype, y= Weight, color = Source, shape = Sex), size = rel(3.0)) +
   theme(axis.text.x = element_text(angle=45, hjust=1))
 ```
 
@@ -137,17 +137,17 @@ ggplot(metadata) +
 
 To plot a histogram we require another geometric object `geom_bar`, which requires a statistical transformation. Some plot types (such as scatterplots) do not require transformations, each point is plotted at x and y coordinates equal to the original value. Other plots, such as boxplots, histograms, prediction lines etc. need to be transformed, and usually has a default statistic that can be changed via the `stat_bin` argument. 
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, warning=FALSE}
 ggplot(metadata) +
-  geom_bar(aes(x = genome_size))
+  geom_bar(aes(x = Weight))
   
 ```
 
 Try plotting with the default value and compare it to the plot using the binwidth values. How do they differ?
 
-```{r, fig.align='center'}
+```{r, fig.align='center', warning=FALSE}
 ggplot(metadata) +
-  geom_bar(aes(x = genome_size), stat = "bin", binwidth=0.05)
+  geom_bar(aes(x = Weight), stat = "bin", binwidth=0.05)
   
 ```
 
@@ -155,18 +155,48 @@ ggplot(metadata) +
 
 Now that we have all the required information on let's try plotting a boxplot similar to what we had done using the base plot functions at the start of this lesson. We can add some additional layers to include a plot title and change the axis labels. Explore the code below and all the different layers that we have added to understand what each layer contributes to the final graphic.
 
-```{r, fig.align='center'}
+```{r, fig.align='center', warning=FALSE}
 ggplot(metadata) +
-  geom_boxplot(aes(x = cit, y = genome_size, fill = cit)) +
-  ggtitle('Boxplot of genome size by citrate mutant type') +
-  xlab('citrate mutant') +
-  ylab('genome size') +
+  geom_boxplot(aes(x = Genotype, y = Weight)) +
+  ggtitle('Distribution of weight by genotype') +
+  xlab('Genotype') +
+  ylab('Weight') +
   theme(panel.grid.major = element_line(size = .5, color = "grey"),
           axis.text.x = element_text(angle=45, hjust=1),
           axis.title = element_text(size = rel(1.5)),
           axis.text = element_text(size = rel(1.25)))
 
 ```
+
+
+Notes:
+
+- The `+` sign used to add layers must be placed at the end of each line containing
+a layer. If, instead, the `+` sign is added in the line before the other layer,
+**`ggplot2`** will not add the new layer and will return an error message.
+
+
+## **`ggplot2`** themes
+
+In addition to `theme_bw()`, which changes the plot background to white, **`ggplot2`**
+comes with several other themes which can be useful to quickly change the look
+of your visualization. The complete list of themes is available
+at <http://docs.ggplot2.org/current/ggtheme.html>. `theme_minimal()` and
+`theme_light()` are popular, and `theme_void()` can be useful as a starting
+point to create a new hand-crafted theme.
+
+The
+[ggthemes](https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html) package
+provides a wide variety of options (including an Excel 2003 theme).
+The [**`ggplot2`** extensions website](https://www.ggplot2-exts.org) provides a list
+of packages that extend the capabilities of **`ggplot2`**, including additional
+themes.
+
+
+## Customization
+
+Take a look at the [**`ggplot2`** cheat sheet](https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf), for ideas on how you can improve plots.
+
 
 # Writing figures to file
 
@@ -178,18 +208,22 @@ The second option is to use R functions in the console, allowing you the flexibi
 2. Write the code that makes the plot.
 3. Close the connection to the new file (with your plot) using `dev.off()`.
 
-```{r, eval=FALSE}
-pdf("figure/boxplot.pdf")
+```{r, eval=FALSE, warning=FALSE}
+# Let's make a new directory where figures can be stored:
 
-ggplot(example_data) +
-  geom_boxplot(aes(x = cit, y =....) +
-  ggtitle(...) +
-  xlab(...) +
-  ylab(...) +
-  theme(panel.grid.major = element_line(...),
-          axis.text.x = element_text(...),
-          axis.title = element_text(...),
-          axis.text = element_text(...)
+dir.create("figures")
+
+pdf("figures/boxplot.pdf")
+
+ggplot(metadata) +
+  geom_boxplot(aes(x = Genotype, y = Weight)) +
+  ggtitle('Distribution of weight by genotype') +
+  xlab('Genotype') +
+  ylab('Weight') +
+  theme(panel.grid.major = element_line(size = .5, color = "grey"),
+          axis.text.x = element_text(angle=45, hjust=1),
+          axis.title = element_text(size = rel(1.5)),
+          axis.text = element_text(size = rel(1.25)))
 
 dev.off()
 ```

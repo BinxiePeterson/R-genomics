@@ -895,92 +895,45 @@ div.tocify {
 <p>We can see the names of the multiple columns. And, we see that some say things like <code>Factor w/ 4 levels</code></p>
 <p>When we read in a file, any column that contains text is automatically assumed to be a factor. Once created, factors can only contain a pre-defined set values, known as <em>levels</em>. By default, R always sorts <em>levels</em> in alphabetical order.</p>
 <p>For instance, we see that <code>Genotype</code> is a Factor w/ 4 levels, <code>chemerin_KO</code>, <code>CMKLR1_HE</code>, <code>CMKLR1_KO</code> and <code>WT</code>.</p>
-<!--
-
-You can check this by using the function `levels()`, and check the
-number of levels using `nlevels()`:
-
-
-```r
-levels(metadata$Genotype)
-nlevels(metadata$Genotype)
-```
-
-Sometimes, the order of the factors does not matter, other times you might want
-to specify the order because it is meaningful (e.g., "low", "medium", "high") or
-it is required by particular type of analysis. Additionally, specifying the
-order of the levels allows to compare levels:
-
-
-```r
-expression <- factor(c("low", "high", "medium", "high", "low", "medium", "high"))
-levels(expression)
-expression <- factor(expression, levels=c("low", "medium", "high"))
-levels(expression)
-min(expression) ## doesn't work
-expression <- factor(expression, levels=c("low", "medium", "high"), ordered=TRUE)
-levels(expression)
-min(expression) ## works!
-```
-
-In R's memory, these factors are represented by numbers (1, 2, 3). They are
-better than using simple integer labels because factors are self describing:
-`"low"`, `"medium"`, and `"high"`" is more descriptive than `1`, `2`, `3`. Which
-is low?  You wouldn't be able to tell with just integer data. Factors have this
-information built in. It is particularly helpful when there are many levels
-(like the species in our example data set).
-
-### Converting factors
-
-If you need to convert a factor to a character vector, simply use
-`as.character(x)`.
-
-Converting a factor to a numeric vector is however a little trickier, and you
-have to go via a character vector. Compare:
-
-
-```r
-f <- factor(c(1, 5, 10, 2))
-as.numeric(f)               ## wrong! and there is no warning...
-as.numeric(as.character(f)) ## works...
-as.numeric(levels(f))[f]    ## The recommended way.
-```
-
-### Challenge
-
-The function `table()` tabulates observations and can be used to create
-bar plots quickly. For instance:
-
-
-```r
-## Question: How can you recreate this plot but by having "control"
+<p>You can check this by using the function <code>levels()</code>, and check the number of levels using <code>nlevels()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(metadata$Genotype)
+<span class="kw">nlevels</span>(metadata$Genotype)</code></pre></div>
+<p>Sometimes, the order of the factors does not matter, other times you might want to specify the order because it is meaningful (e.g., “low”, “medium”, “high”) or it is required by particular type of analysis. Additionally, specifying the order of the levels allows to compare levels:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">expression &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;high&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>, <span class="st">&quot;low&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>))
+<span class="kw">levels</span>(expression)
+expression &lt;-<span class="st"> </span><span class="kw">factor</span>(expression, <span class="dt">levels=</span><span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>))
+<span class="kw">levels</span>(expression)
+<span class="kw">min</span>(expression) ## doesn&#39;t work
+expression &lt;-<span class="st"> </span><span class="kw">factor</span>(expression, <span class="dt">levels=</span><span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>), <span class="dt">ordered=</span><span class="ot">TRUE</span>)
+<span class="kw">levels</span>(expression)
+<span class="kw">min</span>(expression) ## works!</code></pre></div>
+<p>In R’s memory, these factors are represented by numbers (1, 2, 3). They are better than using simple integer labels because factors are self describing: <code>&quot;low&quot;</code>, <code>&quot;medium&quot;</code>, and <code>&quot;high&quot;</code>&quot; is more descriptive than <code>1</code>, <code>2</code>, <code>3</code>. Which is low? You wouldn’t be able to tell with just integer data. Factors have this information built in. It is particularly helpful when there are many levels (like the species in our example data set).</p>
+<div id="converting-factors" class="section level3">
+<h3>Converting factors</h3>
+<p>If you need to convert a factor to a character vector, simply use <code>as.character(x)</code>.</p>
+<p>Converting a factor to a numeric vector is however a little trickier, and you have to go via a character vector. Compare:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">2</span>))
+<span class="kw">as.numeric</span>(f)               ## wrong! and there is no warning...
+<span class="kw">as.numeric</span>(<span class="kw">as.character</span>(f)) ## works...
+<span class="kw">as.numeric</span>(<span class="kw">levels</span>(f))[f]    ## The recommended way.</code></pre></div>
+</div>
+<div id="challenge-1" class="section level3">
+<h3>Challenge</h3>
+<p>The function <code>table()</code> tabulates observations and can be used to create bar plots quickly. For instance:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Question: How can you recreate this plot but by having &quot;control&quot;
 ## being listed last instead of first?
-exprmt <- factor(c("treat1", "treat2", "treat1", "treat3", "treat1", "control",
-                   "treat1", "treat2", "treat3"))
-table(exprmt)
-```
-
-```
-## exprmt
+exprmt &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;treat1&quot;</span>, <span class="st">&quot;treat2&quot;</span>, <span class="st">&quot;treat1&quot;</span>, <span class="st">&quot;treat3&quot;</span>, <span class="st">&quot;treat1&quot;</span>, <span class="st">&quot;control&quot;</span>,
+                   <span class="st">&quot;treat1&quot;</span>, <span class="st">&quot;treat2&quot;</span>, <span class="st">&quot;treat3&quot;</span>))
+<span class="kw">table</span>(exprmt)</code></pre></div>
+<pre><code>## exprmt
 ## control  treat1  treat2  treat3 
-##       1       4       2       2
-```
-
-```r
-barplot(table(exprmt))
-```
-
-<img src="02-starting-with-data_files/figure-html/wrong-order-1.png" width="672" />
-
-
-
-```r
-exprmt <- factor(exprmt, levels=c("treat1", "treat2", "treat3", "control"))
-barplot(table(exprmt))
-```
-
-<img src="02-starting-with-data_files/figure-html/correct-order-1.png" width="672" />
---->
+##       1       4       2       2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(<span class="kw">table</span>(exprmt))</code></pre></div>
+<p><img src="02-starting-with-data_files/figure-html/wrong-order-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">exprmt &lt;-<span class="st"> </span><span class="kw">factor</span>(exprmt, <span class="dt">levels=</span><span class="kw">c</span>(<span class="st">&quot;treat1&quot;</span>, <span class="st">&quot;treat2&quot;</span>, <span class="st">&quot;treat3&quot;</span>, <span class="st">&quot;control&quot;</span>))
+<span class="kw">barplot</span>(<span class="kw">table</span>(exprmt))</code></pre></div>
+<p><img src="02-starting-with-data_files/figure-html/correct-order-1.png" width="672" /> —&gt;</p>
+</div>
 </div>
 </div>
 

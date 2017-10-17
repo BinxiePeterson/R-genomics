@@ -29,23 +29,41 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
+div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
 table.sourceCode { width: 100%; line-height: 100%; }
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
 td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; }
-code > span.dt { color: #902000; }
-code > span.dv { color: #40a070; }
-code > span.bn { color: #40a070; }
-code > span.fl { color: #40a070; }
-code > span.ch { color: #4070a0; }
-code > span.st { color: #4070a0; }
-code > span.co { color: #60a0b0; font-style: italic; }
-code > span.ot { color: #007020; }
-code > span.al { color: #ff0000; font-weight: bold; }
-code > span.fu { color: #06287e; }
-code > span.er { color: #ff0000; font-weight: bold; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 <style type="text/css">
   pre:not([class]) {
@@ -353,10 +371,9 @@ div.tocify {
 <p>Enter <code>dplyr</code>.</p>
 <p><code>dplyr</code> is a package for making data manipulation easier.</p>
 <p>Packages in R are basically sets of additional functions that let you do more stuff in R. The functions we’ve been using, like <code>str()</code>, come built into R; packages give you access to more functions. You need to install a package and then load it to be able to use it.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;dplyr&quot;</span>) ## install</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;dplyr&quot;</span>) ## install</code></pre></div>
 <p>You might get asked to choose a CRAN mirror – this is basically asking you to choose a site to download the package from. The choice doesn’t matter too much; I’d recommend choosing the RStudio mirror.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)          ## load</code></pre>
-<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 3.2.5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)          ## load</code></pre></div>
 <p>You only need to install a package once per computer, but you need to load it every time you open a new R session and want to use that package.</p>
 <div id="what-is-dplyr" class="section level2">
 <h2>What is dplyr?</h2>
@@ -365,131 +382,419 @@ div.tocify {
 <div id="selecting-columns-and-filtering-rows" class="section level3">
 <h3>Selecting columns and filtering rows</h3>
 <p>We’re going to learn some of the most common <code>dplyr</code> functions: <code>select()</code>, <code>filter()</code>, <code>mutate()</code>, <code>group_by()</code>, and <code>summarize()</code>. To select columns of a data frame, use <code>select()</code>. The first argument to this function is the data frame (<code>metadata</code>), and the subsequent arguments are the columns to keep.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(metadata, sample, clade, cit, genome_size)</code></pre>
-<p>To choose rows, use <code>filter()</code>:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">filter</span>(metadata, cit ==<span class="st"> &quot;plus&quot;</span>)</code></pre>
-<pre><code>##     sample generation clade strain  cit       run genome_size
-## 1   ZDB564      31500  Cit+ REL606 plus SRR098289        4.74
-## 2   ZDB172      32000  Cit+ REL606 plus SRR098042        4.77
-## 3   ZDB143      32500  Cit+ REL606 plus SRR098040        4.79
-## 4   CZB152      33000  Cit+ REL606 plus SRR097977        4.80
-## 5   CZB154      33000  Cit+ REL606 plus SRR098026        4.76
-## 6    ZDB87      34000    C2 REL606 plus SRR098035        4.75
-## 7    ZDB96      36000  Cit+ REL606 plus SRR098036        4.74
-## 8   ZDB107      38000  Cit+ REL606 plus SRR098038        4.79
-## 9 REL10979      40000  Cit+ REL606 plus SRR098029        4.78</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(metadata, SampleID, Sex, Genotype)</code></pre></div>
+<p>To choose rows based on specific criteria, use <code>filter()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">filter</span>(metadata, Genotype ==<span class="st"> &quot;WT&quot;</span>)</code></pre></div>
+<pre><code>##     SampleID BarcodeSequence LinkerPrimerSequence
+## 1  101CHE6WT              NA                   NA
+## 2  102CHE6WT              NA                   NA
+## 3  105CHE6WT              NA                   NA
+## 4  106CHE6WT              NA                   NA
+## 5  109CHE6WT              NA                   NA
+## 6  110CHE6WT              NA                   NA
+## 7  113CHE6WT              NA                   NA
+## 8  114CHE6WT              NA                   NA
+## 9   11CMK6WT              NA                   NA
+## 10  12CMK6WT              NA                   NA
+## 11  17CMK6WT              NA                   NA
+## 12  19CMK6WT              NA                   NA
+## 13   1CMK6WT              NA                   NA
+## 14  21CMK6WT              NA                   NA
+## 15  23CMK6WT              NA                   NA
+## 16  26CMK6WT              NA                   NA
+## 17  27CMK6WT              NA                   NA
+## 18  29CMK6WT              NA                   NA
+## 19  31CMK6WT              NA                   NA
+## 20  33CMK6WT              NA                   NA
+## 21  36CMK6WT              NA                   NA
+## 22  37CMK6WT              NA                   NA
+## 23   3CMK6WT              NA                   NA
+## 24  40CMK6WT              NA                   NA
+## 25  41CMK8WT              NA                   NA
+## 26  43CMK8WT              NA                   NA
+## 27  45CMK8WT              NA                   NA
+## 28  46CMK8WT              NA                   NA
+## 29  51CMK8WT              NA                   NA
+## 30  52CMK8WT              NA                   NA
+## 31  57CMK8WT              NA                   NA
+## 32  59CMK8WT              NA                   NA
+## 33   5CMK6WT              NA                   NA
+## 34  61CMK8WT              NA                   NA
+## 35  63CMK8WT              NA                   NA
+## 36  66CMK8WT              NA                   NA
+## 37  67CMK8WT              NA                   NA
+## 38  69CMK8WT              NA                   NA
+## 39   6CMK6WT              NA                   NA
+## 40  71CMK8WT              NA                   NA
+## 41  73CMK8WT              NA                   NA
+## 42  76CMK8WT              NA                   NA
+## 43  77CMK8WT              NA                   NA
+## 44  80CMK8WT              NA                   NA
+## 45  81CHE6WT              NA                   NA
+## 46  82CHE6WT              NA                   NA
+## 47  85CHE6WT              NA                   NA
+## 48  86CHE6WT              NA                   NA
+## 49  89CHE6WT              NA                   NA
+## 50  90CHE6WT              NA                   NA
+## 51  93CHE6WT              NA                   NA
+## 52  94CHE6WT              NA                   NA
+## 53  97CHE6WT              NA                   NA
+## 54  98CHE6WT              NA                   NA
+##                           FileInput Source Mouse Sex Weight Genotype
+## 1  101CHE6WT_S368_L001_R1_001.fastq     BZ   101   F   20.6       WT
+## 2  102CHE6WT_S291_L001_R1_001.fastq     BZ   102   M     NA       WT
+## 3  105CHE6WT_S325_L001_R1_001.fastq     BZ   105         NA       WT
+## 4  106CHE6WT_S336_L001_R1_001.fastq     BZ   106   F     NA       WT
+## 5  109CHE6WT_S369_L001_R1_001.fastq     BZ   109   M   21.6       WT
+## 6  110CHE6WT_S292_L001_R1_001.fastq     BZ   110   F   24.1       WT
+## 7  113CHE6WT_S326_L001_R1_001.fastq     BZ   113   F   19.5       WT
+## 8  114CHE6WT_S337_L001_R1_001.fastq     BZ   114   M   19.2       WT
+## 9   11CMK6WT_S243_L001_R1_001.fastq    CJS    11   F   21.8       WT
+## 10  12CMK6WT_S255_L001_R1_001.fastq    CJS    12   M     NA       WT
+## 11  17CMK6WT_S220_L001_R1_001.fastq    CJS    17   M   22.6       WT
+## 12  19CMK6WT_S244_L001_R1_001.fastq    CJS    19   F   21.4       WT
+## 13   1CMK6WT_S218_L001_R1_001.fastq    CJS     1   M     NA       WT
+## 14  21CMK6WT_S268_L001_R1_001.fastq    CJS    21   M   23.2       WT
+## 15  23CMK6WT_S197_L001_R1_001.fastq    CJS    23   F   18.4       WT
+## 16  26CMK6WT_S233_L001_R1_001.fastq    CJS    26         NA       WT
+## 17  27CMK6WT_S245_L001_R1_001.fastq    CJS    27   M   20.6       WT
+## 18  29CMK6WT_S269_L001_R1_001.fastq    CJS    29   M   23.6       WT
+## 19  31CMK6WT_S198_L001_R1_001.fastq    CJS    31   M   22.6       WT
+## 20  33CMK6WT_S222_L001_R1_001.fastq    CJS    33   M   21.5       WT
+## 21  36CMK6WT_S258_L001_R1_001.fastq    CJS    36   F     NA       WT
+## 22  37CMK6WT_S270_L001_R1_001.fastq    CJS    37   M   18.6       WT
+## 23   3CMK6WT_S242_L001_R1_001.fastq    CJS     3       21.8       WT
+## 24  40CMK6WT_S211_L001_R1_001.fastq    CJS    40   F   21.9       WT
+## 25  41CMK8WT_S223_L001_R1_001.fastq    CJS    41   F   22.5       WT
+## 26  43CMK8WT_S247_L001_R1_001.fastq    CJS    43   M   21.6       WT
+## 27  45CMK8WT_S271_L001_R1_001.fastq    CJS    45   F   19.7       WT
+## 28  46CMK8WT_S283_L001_R1_001.fastq    CJS    46   M   18.6       WT
+## 29  51CMK8WT_S248_L001_R1_001.fastq    CJS    51   F   23.5       WT
+## 30  52CMK8WT_S260_L001_R1_001.fastq    CJS    52   M   24.1       WT
+## 31  57CMK8WT_S225_L001_R1_001.fastq    CJS    57   F   18.2       WT
+## 32  59CMK8WT_S249_L001_R1_001.fastq    CJS    59   M   21.8       WT
+## 33   5CMK6WT_S266_L001_R1_001.fastq    CJS     5   M   23.5       WT
+## 34  61CMK8WT_S273_L001_R1_001.fastq    CJS    61   F   22.6       WT
+## 35  63CMK8WT_S202_L001_R1_001.fastq    CJS    63   F   23.5       WT
+## 36  66CMK8WT_S238_L001_R1_001.fastq    CJS    66       21.4       WT
+## 37  67CMK8WT_S250_L001_R1_001.fastq    CJS    67   F   21.1       WT
+## 38  69CMK8WT_S274_L001_R1_001.fastq    CJS    69   M     NA       WT
+## 39   6CMK6WT_S278_L001_R1_001.fastq    CJS     6   F   19.5       WT
+## 40  71CMK8WT_S203_L001_R1_001.fastq    CJS    71   F   19.8       WT
+## 41  73CMK8WT_S227_L001_R1_001.fastq    CJS    73   F   21.8       WT
+## 42  76CMK8WT_S263_L001_R1_001.fastq    CJS    76   F   23.6       WT
+## 43  77CMK8WT_S275_L001_R1_001.fastq    CJS    77   F   21.5       WT
+## 44  80CMK8WT_S216_L001_R1_001.fastq    CJS    80   M   18.6       WT
+## 45  81CHE6WT_S228_L001_R1_001.fastq     BZ    81   F   19.4       WT
+## 46  82CHE6WT_S240_L001_R1_001.fastq     BZ    82   M   20.5       WT
+## 47  85CHE6WT_S276_L001_R1_001.fastq     BZ    85   F   22.5       WT
+## 48  86CHE6WT_S289_L001_R1_001.fastq     BZ    86   M   23.4       WT
+## 49  89CHE6WT_S323_L001_R1_001.fastq     BZ    89   F   19.7       WT
+## 50  90CHE6WT_S334_L001_R1_001.fastq     BZ    90   M   20.4       WT
+## 51  93CHE6WT_S367_L001_R1_001.fastq     BZ    93   M   22.4       WT
+## 52  94CHE6WT_S290_L001_R1_001.fastq     BZ    94   F   21.6       WT
+## 53  97CHE6WT_S324_L001_R1_001.fastq     BZ    97   F   20.8       WT
+## 54  98CHE6WT_S335_L001_R1_001.fastq     BZ    98   M   19.5       WT
+##    SamplingWeek Description
+## 1             6   101CHE6WT
+## 2             6   102CHE6WT
+## 3             6   105CHE6WT
+## 4             6   106CHE6WT
+## 5             6   109CHE6WT
+## 6             6   110CHE6WT
+## 7             6   113CHE6WT
+## 8             6   114CHE6WT
+## 9             6    11CMK6WT
+## 10            6    12CMK6WT
+## 11            6    17CMK6WT
+## 12            6    19CMK6WT
+## 13            6     1CMK6WT
+## 14            6    21CMK6WT
+## 15            6    23CMK6WT
+## 16            6    26CMK6WT
+## 17            6    27CMK6WT
+## 18            6    29CMK6WT
+## 19            6    31CMK6WT
+## 20            6    33CMK6WT
+## 21            6    36CMK6WT
+## 22            6    37CMK6WT
+## 23            6     3CMK6WT
+## 24            6    40CMK6WT
+## 25            8    41CMK8WT
+## 26            8    43CMK8WT
+## 27            8    45CMK8WT
+## 28            8    46CMK8WT
+## 29            8    51CMK8WT
+## 30            8    52CMK8WT
+## 31            8    57CMK8WT
+## 32            8    59CMK8WT
+## 33            8     5CMK6WT
+## 34            8    61CMK8WT
+## 35            8    63CMK8WT
+## 36            8    66CMK8WT
+## 37            8    67CMK8WT
+## 38            8    69CMK8WT
+## 39            8     6CMK6WT
+## 40            8    71CMK8WT
+## 41            8    73CMK8WT
+## 42            8    76CMK8WT
+## 43            8    77CMK8WT
+## 44            8    80CMK8WT
+## 45            6    81CHE6WT
+## 46            6    82CHE6WT
+## 47            6    85CHE6WT
+## 48            6    86CHE6WT
+## 49            6    89CHE6WT
+## 50            6    90CHE6WT
+## 51            6    93CHE6WT
+## 52            6    94CHE6WT
+## 53            6    97CHE6WT
+## 54            6    98CHE6WT</code></pre>
 </div>
 <div id="pipes" class="section level3">
 <h3>Pipes</h3>
 <p>But what if you wanted to select and filter? There are three ways to do this: use intermediate steps, nested functions, or pipes. With the intermediate steps, you essentially create a temporary data frame and use that as input to the next function. This can clutter up your workspace with lots of objects. You can also nest functions (i.e. one function inside of another). This is handy, but can be difficult to read if too many functions are nested as the process from inside out. The last option, pipes, are a fairly recent addition to R. Pipes let you take the output of one function and send it directly to the next, which is useful when you need to many things to the same data set. Pipes in R look like <code>%&gt;%</code> and are made available via the <code>magrittr</code> package installed as part of <code>dplyr</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(cit ==<span class="st"> &quot;plus&quot;</span>) %&gt;%
-<span class="st">  </span><span class="kw">select</span>(sample, generation, clade)</code></pre>
-<pre><code>##     sample generation clade
-## 1   ZDB564      31500  Cit+
-## 2   ZDB172      32000  Cit+
-## 3   ZDB143      32500  Cit+
-## 4   CZB152      33000  Cit+
-## 5   CZB154      33000  Cit+
-## 6    ZDB87      34000    C2
-## 7    ZDB96      36000  Cit+
-## 8   ZDB107      38000  Cit+
-## 9 REL10979      40000  Cit+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(Genotype ==<span class="st"> &quot;WT&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(SampleID, Sex, Genotype)</code></pre></div>
+<pre><code>##     SampleID Sex Genotype
+## 1  101CHE6WT   F       WT
+## 2  102CHE6WT   M       WT
+## 3  105CHE6WT           WT
+## 4  106CHE6WT   F       WT
+## 5  109CHE6WT   M       WT
+## 6  110CHE6WT   F       WT
+## 7  113CHE6WT   F       WT
+## 8  114CHE6WT   M       WT
+## 9   11CMK6WT   F       WT
+## 10  12CMK6WT   M       WT
+## 11  17CMK6WT   M       WT
+## 12  19CMK6WT   F       WT
+## 13   1CMK6WT   M       WT
+## 14  21CMK6WT   M       WT
+## 15  23CMK6WT   F       WT
+## 16  26CMK6WT           WT
+## 17  27CMK6WT   M       WT
+## 18  29CMK6WT   M       WT
+## 19  31CMK6WT   M       WT
+## 20  33CMK6WT   M       WT
+## 21  36CMK6WT   F       WT
+## 22  37CMK6WT   M       WT
+## 23   3CMK6WT           WT
+## 24  40CMK6WT   F       WT
+## 25  41CMK8WT   F       WT
+## 26  43CMK8WT   M       WT
+## 27  45CMK8WT   F       WT
+## 28  46CMK8WT   M       WT
+## 29  51CMK8WT   F       WT
+## 30  52CMK8WT   M       WT
+## 31  57CMK8WT   F       WT
+## 32  59CMK8WT   M       WT
+## 33   5CMK6WT   M       WT
+## 34  61CMK8WT   F       WT
+## 35  63CMK8WT   F       WT
+## 36  66CMK8WT           WT
+## 37  67CMK8WT   F       WT
+## 38  69CMK8WT   M       WT
+## 39   6CMK6WT   F       WT
+## 40  71CMK8WT   F       WT
+## 41  73CMK8WT   F       WT
+## 42  76CMK8WT   F       WT
+## 43  77CMK8WT   F       WT
+## 44  80CMK8WT   M       WT
+## 45  81CHE6WT   F       WT
+## 46  82CHE6WT   M       WT
+## 47  85CHE6WT   F       WT
+## 48  86CHE6WT   M       WT
+## 49  89CHE6WT   F       WT
+## 50  90CHE6WT   M       WT
+## 51  93CHE6WT   M       WT
+## 52  94CHE6WT   F       WT
+## 53  97CHE6WT   F       WT
+## 54  98CHE6WT   M       WT</code></pre>
 <p>In the above we use the pipe to send the <code>metadata</code> data set first through <code>filter</code>, to keep rows where <code>cit</code> was equal to ‘plus’, and then through <code>select</code> to keep the <code>sample</code> and <code>generation</code> and <code>clade</code> columns. When the data frame is being passed to the <code>filter()</code> and <code>select()</code> functions through a pipe, we don’t need to include it as an argument to these functions anymore.</p>
 <p>If we wanted to create a new object with this smaller version of the data we could do so by assigning it a new name:</p>
-<pre class="sourceCode r"><code class="sourceCode r">meta_citplus &lt;-<span class="st"> </span>metadata %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(cit ==<span class="st"> &quot;plus&quot;</span>) %&gt;%
-<span class="st">  </span><span class="kw">select</span>(sample, generation, clade)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meta_WT &lt;-<span class="st"> </span>metadata %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(Genotype ==<span class="st"> &quot;WT&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(SampleID, Sex, Genotype)
 
-meta_citplus</code></pre>
-<pre><code>##     sample generation clade
-## 1   ZDB564      31500  Cit+
-## 2   ZDB172      32000  Cit+
-## 3   ZDB143      32500  Cit+
-## 4   CZB152      33000  Cit+
-## 5   CZB154      33000  Cit+
-## 6    ZDB87      34000    C2
-## 7    ZDB96      36000  Cit+
-## 8   ZDB107      38000  Cit+
-## 9 REL10979      40000  Cit+</code></pre>
+meta_WT</code></pre></div>
+<pre><code>##     SampleID Sex Genotype
+## 1  101CHE6WT   F       WT
+## 2  102CHE6WT   M       WT
+## 3  105CHE6WT           WT
+## 4  106CHE6WT   F       WT
+## 5  109CHE6WT   M       WT
+## 6  110CHE6WT   F       WT
+## 7  113CHE6WT   F       WT
+## 8  114CHE6WT   M       WT
+## 9   11CMK6WT   F       WT
+## 10  12CMK6WT   M       WT
+## 11  17CMK6WT   M       WT
+## 12  19CMK6WT   F       WT
+## 13   1CMK6WT   M       WT
+## 14  21CMK6WT   M       WT
+## 15  23CMK6WT   F       WT
+## 16  26CMK6WT           WT
+## 17  27CMK6WT   M       WT
+## 18  29CMK6WT   M       WT
+## 19  31CMK6WT   M       WT
+## 20  33CMK6WT   M       WT
+## 21  36CMK6WT   F       WT
+## 22  37CMK6WT   M       WT
+## 23   3CMK6WT           WT
+## 24  40CMK6WT   F       WT
+## 25  41CMK8WT   F       WT
+## 26  43CMK8WT   M       WT
+## 27  45CMK8WT   F       WT
+## 28  46CMK8WT   M       WT
+## 29  51CMK8WT   F       WT
+## 30  52CMK8WT   M       WT
+## 31  57CMK8WT   F       WT
+## 32  59CMK8WT   M       WT
+## 33   5CMK6WT   M       WT
+## 34  61CMK8WT   F       WT
+## 35  63CMK8WT   F       WT
+## 36  66CMK8WT           WT
+## 37  67CMK8WT   F       WT
+## 38  69CMK8WT   M       WT
+## 39   6CMK6WT   F       WT
+## 40  71CMK8WT   F       WT
+## 41  73CMK8WT   F       WT
+## 42  76CMK8WT   F       WT
+## 43  77CMK8WT   F       WT
+## 44  80CMK8WT   M       WT
+## 45  81CHE6WT   F       WT
+## 46  82CHE6WT   M       WT
+## 47  85CHE6WT   F       WT
+## 48  86CHE6WT   M       WT
+## 49  89CHE6WT   F       WT
+## 50  90CHE6WT   M       WT
+## 51  93CHE6WT   M       WT
+## 52  94CHE6WT   F       WT
+## 53  97CHE6WT   F       WT
+## 54  98CHE6WT   M       WT</code></pre>
 <blockquote>
-<h3>Challenge</h3>
-<p>Using pipes, subset the data to include rows where the clade is ‘Cit+’. Retain columns <code>sample</code>, <code>cit</code>, and <code>genome_size.</code></p>
+<h3 id="challenge" class="challenge">Challenge</h3>
+<p>Using pipes, subset the metadata to include rows where the Sex is male, and retain only the columns <code>SampleID</code> and <code>Genotype.</code></p>
 </blockquote>
+<!---
+
+```r
+## Answer
+metadata %>%
+    filter(Sex == M) %>%
+    select(SampleID, Genotype)
+```
+--->
 </div>
 <div id="mutate" class="section level3">
 <h3>Mutate</h3>
 <p>Frequently you’ll want to create new columns based on the values in existing columns, for example to do unit conversions or find the ratio of values in two columns. For this we’ll use <code>mutate()</code>.</p>
-<p>To create a new column of genome size in bp:</p>
-<pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">genome_bp =</span> genome_size *<span class="fl">1e6</span>)</code></pre>
+<p>To create a new column of weight in kg:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Weight_kg =</span> Weight /<span class="st"> </span><span class="dv">1000</span>)</code></pre></div>
 <p>If this runs off your screen and you just want to see the first few rows, you can use a pipe to view the <code>head()</code> of the data (pipes work with non-dplyr functions too, as long as the <code>dplyr</code> or <code>magrittr</code> packages are loaded).</p>
-<pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">genome_bp =</span> genome_size *<span class="fl">1e6</span>) %&gt;%
-<span class="st">  </span>head</code></pre>
-<p>The row has a NA value for clade, so if we wanted to remove those we could insert a <code>filter()</code> in this chain:</p>
-<pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">genome_bp =</span> genome_size *<span class="fl">1e6</span>) %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(clade)) %&gt;%
-<span class="st">  </span>head</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Weight_kg =</span> Weight /<span class="st"> </span><span class="dv">1000</span>) %&gt;%
+<span class="st">  </span>head</code></pre></div>
+<p>Note that we don’t include parentheses at the end of our call to <code>head()</code> above. When piping into a function with no additional arguments, you can call the function with or without parentheses (e.g. <code>head</code> or <code>head()</code>).</p>
+<p>The first few rows of the output are full of <code>NA</code>s, so if we wanted to remove those we could insert a <code>filter()</code> in the chain:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(Weight)) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Weight_kg =</span> Weight /<span class="st"> </span><span class="dv">1000</span>) %&gt;%
+<span class="st">  </span>head</code></pre></div>
 <p><code>is.na()</code> is a function that determines whether something is or is not an <code>NA</code>. The <code>!</code> symbol negates it, so we’re asking for everything that is not an <code>NA</code>.</p>
 </div>
 <div id="split-apply-combine-data-analysis-and-the-summarize-function" class="section level3">
 <h3>Split-apply-combine data analysis and the summarize() function</h3>
-<p>Many data analysis tasks can be approached using the “split-apply-combine” paradigm: split the data into groups, apply some analysis to each group, and then combine the results. <code>dplyr</code> makes this very easy through the use of the <code>group_by()</code> function, which splits the data into groups. When the data is grouped in this way <code>summarize()</code> can be used to collapse each group into a single-row summary. <code>summarize()</code> does this by applying an aggregating or summary function to each group. For example, if we wanted to group by citrate-using mutant status and find the number of rows of data for each status, we would do:</p>
-<pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(cit) %&gt;%
-<span class="st">  </span><span class="kw">summarize</span>(<span class="kw">n</span>())</code></pre>
-<pre><code>## # A tibble: 3 x 2
-##       cit   n()
-##    &lt;fctr&gt; &lt;int&gt;
-## 1   minus     9
-## 2    plus     9
-## 3 unknown    12</code></pre>
+<p>Many data analysis tasks can be approached using the “split-apply-combine” paradigm: split the data into groups, apply some analysis to each group, and then combine the results. <code>dplyr</code> makes this very easy through the use of the <code>group_by()</code> function, which splits the data into groups. When the data is grouped in this way <code>summarize()</code> can be used to collapse each group into a single-row summary. <code>summarize()</code> does this by applying an aggregating or summary function to each group. For example, if we wanted to group by genotype and find the number of rows of data for each genotype, we would do:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(Genotype) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="kw">n</span>())</code></pre></div>
+<pre><code>## # A tibble: 4 x 2
+##      Genotype `n()`
+##        &lt;fctr&gt; &lt;int&gt;
+## 1 chemerin_KO    18
+## 2   CMKLR1_HE     4
+## 3   CMKLR1_KO    40
+## 4          WT    54</code></pre>
 <p>Here the summary function used was <code>n()</code> to find the count for each group. We can also apply many other functions to individual columns to get other summary statistics. For example, in the R base package we can use built-in functions like <code>mean</code>, <code>median</code>, <code>min</code>, and <code>max</code>. By default, all <strong>R functions operating on vectors that contains missing data will return NA</strong>. It’s a way to make sure that users know they have missing data, and make a conscious decision on how to deal with it. When dealing with simple statistics like the mean, the easiest way to ignore <code>NA</code> (the missing data) is to use <code>na.rm=TRUE</code> (<code>rm</code> stands for remove).</p>
-<p>So to view mean <code>genome_size</code> by mutant status:</p>
-<pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(cit) %&gt;%
-<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_size =</span> <span class="kw">mean</span>(genome_size, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</code></pre>
+<p>So to view mean <code>weight</code> by sex:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(Sex) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_weight =</span> <span class="kw">mean</span>(Weight, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</code></pre></div>
 <pre><code>## # A tibble: 3 x 2
-##       cit mean_size
-##    &lt;fctr&gt;     &lt;dbl&gt;
-## 1   minus  4.614444
-## 2    plus  4.768889
-## 3 unknown  4.619167</code></pre>
+##      Sex mean_weight
+##   &lt;fctr&gt;       &lt;dbl&gt;
+## 1           21.74000
+## 2      F    21.47925
+## 3      M    21.30435</code></pre>
 <p>You can group by multiple columns too:</p>
-<pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(cit, clade) %&gt;%
-<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_size =</span> <span class="kw">mean</span>(genome_size, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</code></pre>
-<pre><code>## Source: local data frame [13 x 3]
-## Groups: cit [?]
-## 
-##        cit   clade mean_size
-##     &lt;fctr&gt;  &lt;fctr&gt;     &lt;dbl&gt;
-## 1    minus      C1  4.606667
-## 2    minus      C2  4.625000
-## 3    minus      C3  4.610000
-## 4    minus    Cit+  4.600000
-## 5     plus      C2  4.750000
-## 6     plus    Cit+  4.771250
-## 7  unknown (C1,C2)  4.620000
-## 8  unknown      C1  4.630000
-## 9  unknown      C2  4.620000
-## 10 unknown      C3  4.590000
-## 11 unknown      UC  4.625000
-## 12 unknown unknown  4.615000
-## 13 unknown      NA  4.620000</code></pre>
-<p>Looks like for one of these clones, the clade is missing. We could then discard those rows using <code>filter()</code>:</p>
-<pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(cit, clade) %&gt;%
-<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_size =</span> <span class="kw">mean</span>(genome_size, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(clade))</code></pre>
-<p>All of a sudden this isn’t running of the screen anymore. That’s because <code>dplyr</code> has changed our <code>data.frame</code> to a <code>tbl_df</code>. This is a data structure that’s very similar to a data frame; for our purposes the only difference is that it won’t automatically show tons of data going off the screen.</p>
-<p>You can also summarize multiple variables at the same time:</p>
-<pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(cit, clade) %&gt;%
-<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_size =</span> <span class="kw">mean</span>(genome_size, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
-            <span class="dt">min_generation =</span> <span class="kw">min</span>(generation))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(Sex, Genotype) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_weight =</span> <span class="kw">mean</span>(Weight, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</code></pre></div>
+<pre><code>## # A tibble: 11 x 3
+## # Groups:   Sex [?]
+##       Sex    Genotype mean_weight
+##    &lt;fctr&gt;      &lt;fctr&gt;       &lt;dbl&gt;
+##  1        chemerin_KO    23.50000
+##  2          CMKLR1_KO    21.00000
+##  3                 WT    21.60000
+##  4      F chemerin_KO    22.48750
+##  5      F   CMKLR1_HE    20.95000
+##  6      F   CMKLR1_KO    21.45263
+##  7      F          WT    21.20833
+##  8      M chemerin_KO    20.47143
+##  9      M   CMKLR1_HE    22.35000
+## 10      M   CMKLR1_KO    21.41765
+## 11      M          WT    21.39500</code></pre>
+<p>When grouping both by <code>Sex</code> and <code>Genotype</code>, the first rows are for individuals for which their Weight was not recorded. We can remove the missing values for weight before we attempt to calculate the summary statistics. Because the missing values are removed, we can omit <code>na.rm = TRUE</code> when computing the mean:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(Weight)) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(Sex, Genotype) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_weight =</span> <span class="kw">mean</span>(Weight))</code></pre></div>
+<pre><code>## # A tibble: 11 x 3
+## # Groups:   Sex [?]
+##       Sex    Genotype mean_weight
+##    &lt;fctr&gt;      &lt;fctr&gt;       &lt;dbl&gt;
+##  1        chemerin_KO    23.50000
+##  2          CMKLR1_KO    21.00000
+##  3                 WT    21.60000
+##  4      F chemerin_KO    22.48750
+##  5      F   CMKLR1_HE    20.95000
+##  6      F   CMKLR1_KO    21.45263
+##  7      F          WT    21.20833
+##  8      M chemerin_KO    20.47143
+##  9      M   CMKLR1_HE    22.35000
+## 10      M   CMKLR1_KO    21.41765
+## 11      M          WT    21.39500</code></pre>
+<p>Once the data are grouped, you can also summarize multiple variables at the same time (and not necessarily on the same variable). For instance, we could add a column indicating the minimum Weight for each Genotype for each Sex:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(Weight)) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(Sex, Genotype) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_weight =</span> <span class="kw">mean</span>(Weight),
+            <span class="dt">min_weight =</span> <span class="kw">min</span>(Weight))</code></pre></div>
+<pre><code>## # A tibble: 11 x 4
+## # Groups:   Sex [?]
+##       Sex    Genotype mean_weight min_weight
+##    &lt;fctr&gt;      &lt;fctr&gt;       &lt;dbl&gt;      &lt;dbl&gt;
+##  1        chemerin_KO    23.50000       23.5
+##  2          CMKLR1_KO    21.00000       20.5
+##  3                 WT    21.60000       21.4
+##  4      F chemerin_KO    22.48750       20.5
+##  5      F   CMKLR1_HE    20.95000       19.5
+##  6      F   CMKLR1_KO    21.45263       18.5
+##  7      F          WT    21.20833       18.2
+##  8      M chemerin_KO    20.47143       18.2
+##  9      M   CMKLR1_HE    22.35000       20.8
+## 10      M   CMKLR1_KO    21.41765       18.4
+## 11      M          WT    21.39500       18.6</code></pre>
+<p>Looks like for some of these samples, the Sex was also not recorded. We could then discard those rows using <code>filter()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(Sex, Genotype) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean_weight =</span> <span class="kw">mean</span>(Weight, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(Sex !=<span class="st"> &quot;&quot;</span>)</code></pre></div>
 <p><a href="http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">Handy dplyr cheatsheet</a></p>
 <p><em>Much of this lesson was copied or adapted from Jeff Hollister’s <a href="http://usepa.github.io/introR/2015/01/14/03-Clean/">materials</a></em></p>
 </div>
