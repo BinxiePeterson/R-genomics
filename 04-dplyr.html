@@ -383,6 +383,123 @@ div.tocify {
 <h3>Selecting columns and filtering rows</h3>
 <p>We’re going to learn some of the most common <code>dplyr</code> functions: <code>select()</code>, <code>filter()</code>, <code>mutate()</code>, <code>group_by()</code>, and <code>summarize()</code>. To select columns of a data frame, use <code>select()</code>. The first argument to this function is the data frame (<code>metadata</code>), and the subsequent arguments are the columns to keep.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(metadata, SampleID, Sex, Genotype)</code></pre></div>
+<pre><code>##      SampleID Sex    Genotype
+## 1   100CHE6KO   F chemerin_KO
+## 2   101CHE6WT   F          WT
+## 3   102CHE6WT   M          WT
+## 4   103CHE6KO   M chemerin_KO
+## 5   104CHE6KO   M chemerin_KO
+## 6   105CHE6WT              WT
+## 7   106CHE6WT   F          WT
+## 8   107CHE6KO   M chemerin_KO
+## 9   108CHE6KO   F chemerin_KO
+## 10  109CHE6WT   M          WT
+## 11   10CMK6KO   F   CMKLR1_KO
+## 12  110CHE6WT   F          WT
+## 13  111CHE6KO   F chemerin_KO
+## 14  112CHE6KO   F chemerin_KO
+## 15  113CHE6WT   F          WT
+## 16  114CHE6WT   M          WT
+## 17  115CHE6KO   M chemerin_KO
+## 18  116CHE6KO   M chemerin_KO
+## 19   11CMK6WT   F          WT
+## 20   12CMK6WT   M          WT
+## 21  13CMK6HET   F   CMKLR1_HE
+## 22   14CMK6KO   F   CMKLR1_KO
+## 23  15CMK6HET   M   CMKLR1_HE
+## 24   16CMK6KO   M   CMKLR1_KO
+## 25   17CMK6WT   M          WT
+## 26   18CMK6KO   M   CMKLR1_KO
+## 27   19CMK6WT   F          WT
+## 28    1CMK6WT   M          WT
+## 29   20CMK6KO   M   CMKLR1_KO
+## 30   21CMK6WT   M          WT
+## 31   22CMK6KO   F   CMKLR1_KO
+## 32   23CMK6WT   F          WT
+## 33   24CMK6KO   F   CMKLR1_KO
+## 34   25CMK6KO       CMKLR1_KO
+## 35   26CMK6WT              WT
+## 36   27CMK6WT   M          WT
+## 37   28CMK6KO   M   CMKLR1_KO
+## 38   29CMK6WT   M          WT
+## 39    2CMK6KO   F   CMKLR1_KO
+## 40   30CMK6KO   F   CMKLR1_KO
+## 41   31CMK6WT   M          WT
+## 42   32CMK6KO   F   CMKLR1_KO
+## 43   33CMK6WT   M          WT
+## 44   34CMK6KO   M   CMKLR1_KO
+## 45   35CMK6KO   F   CMKLR1_KO
+## 46   36CMK6WT   F          WT
+## 47   37CMK6WT   M          WT
+## 48   38CMK6KO   F   CMKLR1_KO
+## 49   39CMK6KO   M   CMKLR1_KO
+## 50    3CMK6WT              WT
+## 51   40CMK6WT   F          WT
+## 52   41CMK8WT   F          WT
+## 53   42CMK8KO   M   CMKLR1_KO
+## 54   43CMK8WT   M          WT
+## 55   44CMK8KO   F   CMKLR1_KO
+## 56   45CMK8WT   F          WT
+## 57   46CMK8WT   M          WT
+## 58   47CMK8KO   F   CMKLR1_KO
+## 59   48CMK8KO       CMKLR1_KO
+## 60   49CMK8KO   M   CMKLR1_KO
+## 61    4CMK6KO   M   CMKLR1_KO
+## 62   50CMK8KO   F   CMKLR1_KO
+## 63   51CMK8WT   F          WT
+## 64   52CMK8WT   M          WT
+## 65  53CMK8HET   M   CMKLR1_HE
+## 66   54CMK8KO   F   CMKLR1_KO
+## 67  55CMK8HET   F   CMKLR1_HE
+## 68   56CMK8KO   F   CMKLR1_KO
+## 69   57CMK8WT   F          WT
+## 70   58CMK8KO   M   CMKLR1_KO
+## 71   59CMK8WT   M          WT
+## 72    5CMK6WT   M          WT
+## 73   60CMK8KO   F   CMKLR1_KO
+## 74   61CMK8WT   F          WT
+## 75   62CMK8KO   F   CMKLR1_KO
+## 76   63CMK8WT   F          WT
+## 77   64CMK8KO   M   CMKLR1_KO
+## 78   65CMK8KO   M   CMKLR1_KO
+## 79   66CMK8WT              WT
+## 80   67CMK8WT   F          WT
+## 81   68CMK8KO   F   CMKLR1_KO
+## 82   69CMK8WT   M          WT
+## 83    6CMK6WT   F          WT
+## 84   70CMK8KO   M   CMKLR1_KO
+## 85   71CMK8WT   F          WT
+## 86   72CMK8KO   M   CMKLR1_KO
+## 87   73CMK8WT   F          WT
+## 88   74CMK8KO   M   CMKLR1_KO
+## 89   75CMK8KO   M   CMKLR1_KO
+## 90   76CMK8WT   F          WT
+## 91   77CMK8WT   F          WT
+## 92   78CMK8KO   M   CMKLR1_KO
+## 93   79CMK8KO   M   CMKLR1_KO
+## 94    7CMK6KO   F   CMKLR1_KO
+## 95   80CMK8WT   M          WT
+## 96   81CHE6WT   F          WT
+## 97   82CHE6WT   M          WT
+## 98   83CHE6KO   F chemerin_KO
+## 99   84CHE6KO   M chemerin_KO
+## 100  85CHE6WT   F          WT
+## 101  86CHE6WT   M          WT
+## 102  87CHE6KO   F chemerin_KO
+## 103  88CHE6KO   F chemerin_KO
+## 104  89CHE6WT   F          WT
+## 105   8CMK6KO   M   CMKLR1_KO
+## 106  90CHE6WT   M          WT
+## 107  91CHE6KO   F chemerin_KO
+## 108  92CHE6KO   F chemerin_KO
+## 109  93CHE6WT   M          WT
+## 110  94CHE6WT   F          WT
+## 111  95CHE6KO     chemerin_KO
+## 112  96CHE6KO   M chemerin_KO
+## 113  97CHE6WT   F          WT
+## 114  98CHE6WT   M          WT
+## 115  99CHE6KO   M chemerin_KO
+## 116   9CMK6KO   F   CMKLR1_KO</code></pre>
 <p>To choose rows based on specific criteria, use <code>filter()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">filter</span>(metadata, Genotype ==<span class="st"> &quot;WT&quot;</span>)</code></pre></div>
 <pre><code>##     SampleID BarcodeSequence LinkerPrimerSequence
@@ -553,7 +670,7 @@ div.tocify {
 </div>
 <div id="pipes" class="section level3">
 <h3>Pipes</h3>
-<p>But what if you wanted to select and filter? There are three ways to do this: use intermediate steps, nested functions, or pipes. With the intermediate steps, you essentially create a temporary data frame and use that as input to the next function. This can clutter up your workspace with lots of objects. You can also nest functions (i.e. one function inside of another). This is handy, but can be difficult to read if too many functions are nested as the process from inside out. The last option, pipes, are a fairly recent addition to R. Pipes let you take the output of one function and send it directly to the next, which is useful when you need to many things to the same data set. Pipes in R look like <code>%&gt;%</code> and are made available via the <code>magrittr</code> package installed as part of <code>dplyr</code>.</p>
+<p>But what if you wanted to select and filter? There are three ways to do this: use intermediate steps, nested functions, or pipes. With the intermediate steps, you essentially create a temporary data frame and use that as input to the next function. This can clutter up your workspace with lots of objects. You can also nest functions (i.e. one function inside of another). This is handy, but can be difficult to read if too many functions are nested as the process from inside out. The last option, pipes, are a fairly recent addition to R. Pipes let you take the output of one function and send it directly to the next, which is useful when you need to do many things to the same data set. Pipes in R look like <code>%&gt;%</code> and are made available via the <code>magrittr</code> package installed as part of <code>dplyr</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(Genotype ==<span class="st"> &quot;WT&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">select</span>(SampleID, Sex, Genotype)</code></pre></div>
@@ -612,7 +729,7 @@ div.tocify {
 ## 52  94CHE6WT   F       WT
 ## 53  97CHE6WT   F       WT
 ## 54  98CHE6WT   M       WT</code></pre>
-<p>In the above we use the pipe to send the <code>metadata</code> data set first through <code>filter</code>, to keep rows where <code>cit</code> was equal to ‘plus’, and then through <code>select</code> to keep the <code>sample</code> and <code>generation</code> and <code>clade</code> columns. When the data frame is being passed to the <code>filter()</code> and <code>select()</code> functions through a pipe, we don’t need to include it as an argument to these functions anymore.</p>
+<p>In the above we use the pipe to send the <code>metadata</code> data set first through <code>filter</code>, to keep rows where <code>Genotype</code> was equal to ‘WT’, and then through <code>select</code> to keep the <code>SampleID</code> and <code>Sex</code> and <code>Genotype</code> columns. When the data frame is being passed to the <code>filter()</code> and <code>select()</code> functions through a pipe, we don’t need to include it as an argument to these functions anymore.</p>
 <p>If we wanted to create a new object with this smaller version of the data we could do so by assigning it a new name:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meta_WT &lt;-<span class="st"> </span>metadata %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(Genotype ==<span class="st"> &quot;WT&quot;</span>) %&gt;%

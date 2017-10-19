@@ -72,7 +72,7 @@ We're going to learn some of the most common `dplyr` functions: `select()`,
 data frame, use `select()`. The first argument to this function is the data
 frame (`metadata`), and the subsequent arguments are the columns to keep.
 
-```{r, results = 'hide', purl = FALSE}
+```{r, purl = FALSE}
 select(metadata, SampleID, Sex, Genotype)
 ```
 
@@ -92,7 +92,7 @@ nest functions (i.e. one function inside of another).  This is handy, but can be
 difficult to read if too many functions are nested as the process from inside
 out. The last option, pipes, are a fairly recent addition to R. Pipes let you
 take the output of one function and send it directly to the next, which is
-useful when you need to many things to the same data set.  Pipes in R look like
+useful when you need to do many things to the same data set.  Pipes in R look like
 `%>%` and are made available via the `magrittr` package installed as
 part of `dplyr`.
 
@@ -103,8 +103,8 @@ metadata %>%
 ```
 
 In the above we use the pipe to send the `metadata` data set first through
-`filter`, to keep rows where `cit` was equal to 'plus', and then through `select` to
-keep the `sample` and `generation` and `clade` columns. When the data frame is being passed to the
+`filter`, to keep rows where `Genotype` was equal to 'WT', and then through `select` to
+keep the `SampleID` and `Sex` and `Genotype` columns. When the data frame is being passed to the
 `filter()` and `select()` functions through a pipe, we don't need to include it
 as an argument to these functions anymore.
 
