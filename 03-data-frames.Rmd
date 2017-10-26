@@ -114,7 +114,7 @@ metadata[, 7]    # Entire 7th column
 > Use `nrow()` and `seq()` to create a new data frame called `meta_by_2` that includes all even numbered rows of `metadata`.
 > 
 > ## Solution
-> > meta_data[seq(2, nrow(metadata), by = 2, ]
+> > meta_by_2 <- metadata[seq(2, nrow(metadata), by = 2), ]
 > > 
 > >
 > 
